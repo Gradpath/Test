@@ -9,5 +9,7 @@ public class SalesAuditRepository {
 	
 	@Autowired
     private JdbcTemplate jdbcTemplate;
+	
+	
 
 }

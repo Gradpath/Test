@@ -2,6 +2,7 @@ package com.windys.salesaudit.model;
 
 import java.util.Date;
 
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
