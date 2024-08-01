@@ -2,6 +2,7 @@ package com.windys.salesaudit.utility;
 
 import java.text.SimpleDateFormat;
 
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,6 +25,7 @@ public class Constants {
     public static final String CO_CODE_CAND      = "CAND";
     
     //Date formats
+    public static final org.joda.time.format.DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("MM/dd/yyyy");
     public static final SimpleDateFormat dateDisplayFormat = new SimpleDateFormat("MM/dd/yyyy");
     public static final SimpleDateFormat dateDBFormat = new SimpleDateFormat("yyyy-MM-dd");
     public static final SimpleDateFormat dateDayIdFormat = new SimpleDateFormat("yyyyMMdd");
@@ -39,4 +41,5 @@ public class Constants {
 	public String getRolesWebservice() {
 		return this.rolesWebservice;
 	}
+	
 }

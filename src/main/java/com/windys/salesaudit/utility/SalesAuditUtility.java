@@ -1,9 +1,7 @@
 package com.windys.salesaudit.utility;
 
 import java.text.ParseException;
-import java.time.format.TextStyle;
 import java.util.Date;
-import java.util.Locale;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -161,5 +159,47 @@ public class SalesAuditUtility {
 		salesAuditResponse.setRdcActual(auditEntry.getRdcActual());
 		return salesAuditResponse;
 	}
+	
+	 /**
+     * validateStringDecimal - field validation method for String decimals. 
+     *
+     * @param fieldName
+     * @param fieldValue
+     * @param minimum
+     * @param maximum
+     */
+		public SalesAuditResponse validateStringDecimal(String fieldName, String fieldValue) {
+			Logger.debug("validateStringDecimal");
+			Logger.debug("fieldName=" + fieldName);
+			Logger.debug("fieldValue=" + fieldValue);
+			SalesAuditResponse salesAuditResponse = new SalesAuditResponse();
+			// Check if a fieldValue was keyed
+			if (fieldValue != null && !fieldValue.isEmpty()) {
+
+				// Trim the value
+				String fieldVal = fieldValue.trim();
+
+				// Convert to validate and remove leading zeros
+				Double val = 0.0;
+				try {
+					val = Double.parseDouble(fieldVal);
+				} catch (NumberFormatException e) {
+					salesAuditResponse.setErrorMsg("field.notNumeric");
+					Logger.warn("Exception converting keyed " + fieldName + " to Double. fieldVal=" + fieldVal, e);
+					return salesAuditResponse;
+				}
+
+				// Make sure fieldValue is not negative
+				if (val < 0.0) {
+					salesAuditResponse.setErrorMsg("field.invalidNegative");
+					Logger.warn(fieldName + " is not >= 0 test failed. fieldVal=" + fieldVal);
+					return salesAuditResponse;
+				}
+			} else {
+				salesAuditResponse.setErrorMsg("field.notNumeric");
+				Logger.debug("Field is null/not numeric");
+			}
+			return salesAuditResponse;
+		}
 
 }

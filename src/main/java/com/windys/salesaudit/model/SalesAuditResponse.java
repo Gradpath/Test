@@ -1,5 +1,7 @@
 package com.windys.salesaudit.model;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,7 +10,7 @@ import lombok.Getter;
 public class SalesAuditResponse extends AuditEntry{
 	
 	private boolean allowDataEdits;
-	private String errorMsg;
+	private List<String> errorMsgList;
 	private String actionMsg;
 	
 	
@@ -18,17 +20,19 @@ public class SalesAuditResponse extends AuditEntry{
 	public void setAllowDataEdits(boolean allowDataEdits) {
 		this.allowDataEdits = allowDataEdits;
 	}
-	public String getErrorMsg() {
-		return errorMsg;
-	}
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
-	}
+	
 	public String getActionMsg() {
 		return actionMsg;
 	}
 	public void setActionMsg(String actionMsg) {
 		this.actionMsg = actionMsg;
 	}
+	public List<String> getErrorMsg() {
+		return errorMsgList;
+	}
+	public void setErrorMsg(List<String> errorMsg) {
+		this.errorMsgList = errorMsg;
+	}
+	
 	
 }
