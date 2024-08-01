@@ -1,7 +1,9 @@
 package com.windys.salesaudit.utility;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -143,7 +145,7 @@ public class SalesAuditUtility {
 		SalesAuditResponse salesAuditResponse = new SalesAuditResponse();
 
 		salesAuditResponse.setAllowDataEdits(false);
-		salesAuditResponse.setErrorMsg(validateResponse);
+		salesAuditResponse.setErrorMsg(new ArrayList<>(List.of(validateResponse)));
 		return salesAuditResponse;
 	}
 
@@ -151,7 +153,7 @@ public class SalesAuditUtility {
 		SalesAuditResponse salesAuditResponse = new SalesAuditResponse();
 
 		salesAuditResponse.setAllowDataEdits(false);
-		salesAuditResponse.setErrorMsg(validateResponse);
+		salesAuditResponse.setErrorMsg(new ArrayList<>(List.of(validateResponse)));
 		salesAuditResponse.setSiteNum(auditEntry.getSiteNum());
 		salesAuditResponse.setBusinessDat(auditEntry.getBusinessDat());
 		salesAuditResponse.setAuditActual(auditEntry.getAuditActual());
@@ -165,14 +167,14 @@ public class SalesAuditUtility {
      *
      * @param fieldName
      * @param fieldValue
+	 * @param salesAuditResponse 
      * @param minimum
      * @param maximum
      */
-		public SalesAuditResponse validateStringDecimal(String fieldName, String fieldValue) {
+		public SalesAuditResponse validateStringDecimal(String fieldName, String fieldValue, SalesAuditResponse salesAuditResponse) {
 			Logger.debug("validateStringDecimal");
 			Logger.debug("fieldName=" + fieldName);
 			Logger.debug("fieldValue=" + fieldValue);
-			SalesAuditResponse salesAuditResponse = new SalesAuditResponse();
 			// Check if a fieldValue was keyed
 			if (fieldValue != null && !fieldValue.isEmpty()) {
 
@@ -184,19 +186,19 @@ public class SalesAuditUtility {
 				try {
 					val = Double.parseDouble(fieldVal);
 				} catch (NumberFormatException e) {
-					salesAuditResponse.setErrorMsg("field.notNumeric");
+					salesAuditResponse.setErrorMsg(new ArrayList<>(List.of("field.notNumeric")));
 					Logger.warn("Exception converting keyed " + fieldName + " to Double. fieldVal=" + fieldVal, e);
 					return salesAuditResponse;
 				}
 
 				// Make sure fieldValue is not negative
 				if (val < 0.0) {
-					salesAuditResponse.setErrorMsg("field.invalidNegative");
+					salesAuditResponse.setErrorMsg(new ArrayList<>(List.of("field.invalidNegative")));
 					Logger.warn(fieldName + " is not >= 0 test failed. fieldVal=" + fieldVal);
 					return salesAuditResponse;
 				}
 			} else {
-				salesAuditResponse.setErrorMsg("field.notNumeric");
+				salesAuditResponse.setErrorMsg(new ArrayList<>(List.of("field.notNumeric")));
 				Logger.debug("Field is null/not numeric");
 			}
 			return salesAuditResponse;

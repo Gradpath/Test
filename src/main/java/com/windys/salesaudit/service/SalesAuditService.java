@@ -1,9 +1,13 @@
 package com.windys.salesaudit.service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -42,6 +46,75 @@ public class SalesAuditService {
 	
 	@Value("cash.to.count.field.label")
 	String cash_to_count_field_label;
+	
+	@Value("sales.tax.field.label")
+	String sales_tax_field_label;
+	
+	@Value("localpromo.field.label")
+	String localpromo_field_label;
+	
+    @Value("${nationalpromo.field.label}")
+    private String nationalPromoLabel;
+
+    @Value("${kmupgrade.field.label}")
+    private String kmUpgradeLabel;
+
+    @Value("${coupons.field.label}")
+    private String couponsLabel;
+
+    @Value("${discounts.field.label}")
+    private String discountsLabel;
+
+    @Value("${manager.meals.field.label}")
+    private String managerMealsLabel;
+
+    @Value("${employee.meals.field.label}")
+    private String employeeMealsLabel;
+
+    @Value("${gift.sales.field.label}")
+    private String giftSalesLabel;
+
+    @Value("${gift.redeemed.field.label}")
+    private String giftRedeemedLabel;
+
+    @Value("${credit.sales.field.label}")
+    private String creditSalesLabel;
+
+    @Value("${credit.refund.field.label}")
+    private String creditRefundLabel;
+
+    @Value("${debt.sales.field.label}")
+    private String debtSalesLabel;
+
+    @Value("${food.surcharge.field.label}")
+    private String foodSurchargeLabel;
+
+    @Value("${manager.void.field.label}")
+    private String managerVoidLabel;
+
+    @Value("${refunds.field.label}")
+    private String refundsLabel;
+
+    @Value("${mobile.pay.field.label}")
+    private String mobilePayLabel;
+
+    @Value("${mobile.pay.refund.field.label}")
+    private String mobilePayRefundLabel;
+
+    @Value("${gift.card.cash.back.field.label}")
+    private String giftCardCashBackLabel;
+
+    @Value("${mcx.field.label}")
+    private String mcxLabel;
+
+    @Value("${local.prepay.field.label}")
+    private String localPrePayLabel;
+
+    @Value("${dtfadeposits.field.label}")
+    private String dtfaDepositsLabel;
+
+    @Value("${tax.exempt.field.label}")
+    private String taxExemptLabel;
 
 	public FiscalData getFiscalCalInfo(Date businessDat) {
 		// TODO Auto-generated method stub
@@ -183,59 +256,39 @@ public class SalesAuditService {
 	public SalesAuditResponse validateSalesAudit(@Valid @NotBlank String selectedDate,
 			@Valid @NotBlank String selectedRestaurant, AuditEntry auditEntry) {
 		String labelSuffix = label_suffix_char;
-
+		SalesAuditResponse salesAuditResponse = new SalesAuditResponse();
 		if (!selectedRestaurant.isEmpty() && !selectedDate.isEmpty()) {
 			// Validate dollar amounts.
+			Map<String, String> auditFields = new HashMap<>();
+			auditFields.put(cash_to_count_field_label, auditEntry.getAuditActual().getCashToCount());
+			auditFields.put(sales_tax_field_label, auditEntry.getAuditActual().getSalesTax());
+			auditFields.put(localpromo_field_label, auditEntry.getAuditActual().getLocalPromo());
+	        auditFields.put(nationalPromoLabel, auditEntry.getAuditActual().getNationalPromo());
+	        auditFields.put(kmUpgradeLabel,  auditEntry.getAuditActual().getUpgradeKidsMeal());
+	        auditFields.put(couponsLabel,  auditEntry.getAuditActual().getCoupons());
+	        auditFields.put(discountsLabel, auditEntry.getAuditActual().getDiscounts());
+	        auditFields.put(managerMealsLabel, auditEntry.getAuditActual().getMgrMeals());
+	        auditFields.put(employeeMealsLabel, auditEntry.getAuditActual().getEmpMeals());
+	        auditFields.put(giftSalesLabel, auditEntry.getAuditActual().getGcSales());
+	        auditFields.put(giftRedeemedLabel, auditEntry.getAuditActual().getGcRedeemed());
+	        auditFields.put(creditSalesLabel, auditEntry.getAuditActual().getCreditSales());
+	        auditFields.put(creditRefundLabel, auditEntry.getAuditActual().getCreditRefund());
+	        auditFields.put(debtSalesLabel, auditEntry.getAuditActual().getDebitSales());
+	        auditFields.put(foodSurchargeLabel, auditEntry.getAuditActual().getFoodSurcharge());
+	        auditFields.put(managerVoidLabel, auditEntry.getAuditActual().getMgrVoid());
+	        auditFields.put(refundsLabel, auditEntry.getAuditActual().getRefunds());
+	        auditFields.put(mobilePayLabel, auditEntry.getAuditActual().getMobilePay());
+	        auditFields.put(mobilePayRefundLabel, auditEntry.getAuditActual().getMobilePayRefund());
+	        auditFields.put(giftCardCashBackLabel, auditEntry.getAuditActual().getGcCashBack());
+	        auditFields.put(mcxLabel, auditEntry.getAuditActual().getMcx());
+	        auditFields.put(localPrePayLabel, auditEntry.getAuditActual().getLocalPrePay());
+	        auditFields.put(dtfaDepositsLabel, auditEntry.getAuditActual().getDtfaDeposit());
+	        auditFields.put(taxExemptLabel, auditEntry.getAuditActual().getTaxExempt());
 
-			salesAuditUtility.validateStringDecimal(
-					StringUtils.removeEnd(cash_to_count_field_label, labelSuffix),
-					auditEntry.getAuditActual().getCashToCount());
-			validateStringDecimal(StringUtils.removeEnd(getText("sales.tax.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getSalesTax());
-			validateStringDecimal(StringUtils.removeEnd(getText("localpromo.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getLocalPromo());
-			validateStringDecimal(StringUtils.removeEnd(getText("nationalpromo.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getNationalPromo());
-			validateStringDecimal(StringUtils.removeEnd(getText("kmupgrade.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getUpgradeKidsMeal());
-			validateStringDecimal(StringUtils.removeEnd(getText("coupons.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getCoupons());
-			validateStringDecimal(StringUtils.removeEnd(getText("discounts.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getDiscounts());
-			validateStringDecimal(StringUtils.removeEnd(getText("manager.meals.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getMgrMeals());
-			validateStringDecimal(StringUtils.removeEnd(getText("employee.meals.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getEmpMeals());
-			validateStringDecimal(StringUtils.removeEnd(getText("gift.sales.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getGcSales());
-			validateStringDecimal(StringUtils.removeEnd(getText("gift.redeemed.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getGcRedeemed());
-			validateStringDecimal(StringUtils.removeEnd(getText("credit.sales.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getCreditSales());
-			validateStringDecimal(StringUtils.removeEnd(getText("credit.refund.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getCreditRefund());
-			validateStringDecimal(StringUtils.removeEnd(getText("debt.sales.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getDebitSales());
-			validateStringDecimal(StringUtils.removeEnd(getText("food.surcharge.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getFoodSurcharge());
-			validateStringDecimal(StringUtils.removeEnd(getText("manager.void.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getMgrVoid());
-			validateStringDecimal(StringUtils.removeEnd(getText("refunds.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getRefunds());
-			validateStringDecimal(StringUtils.removeEnd(getText("mobile.pay.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getMobilePay());
-			validateStringDecimal(StringUtils.removeEnd(getText("mobile.pay.refund.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getMobilePayRefund());
-			validateStringDecimal(StringUtils.removeEnd(getText("gift.card.cash.back.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getGcCashBack());
-			validateStringDecimal(StringUtils.removeEnd(getText("mcx.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getMcx());
-			validateStringDecimal(StringUtils.removeEnd(getText("local.prepay.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getLocalPrePay());
-			validateStringDecimal(StringUtils.removeEnd(getText("dtfadeposits.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getDtfaDeposit());
-			validateStringDecimal(StringUtils.removeEnd(getText("tax.exempt.field.label"), labelSuffix),
-					auditEntry.getAuditActual().getTaxExempt());
+	        auditFields.forEach((label, valueSupplier) -> {
+	            String fieldLabel = StringUtils.removeEnd(label, labelSuffix);
+	            salesAuditUtility.validateStringDecimal(fieldLabel, valueSupplier, salesAuditResponse);
+	        });
 
 			// Validate date entered.
 			DateTime dt = Constants.dateFormatter.parseDateTime(selectedDate);
@@ -246,7 +299,7 @@ public class SalesAuditService {
 		} else {
 			Logger.debug("Nothing to validate in DailySalesEntry...");
 		}
-		return null;
+		return salesAuditResponse;
 	}
 
 }
