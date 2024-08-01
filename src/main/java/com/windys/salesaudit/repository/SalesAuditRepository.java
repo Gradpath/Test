@@ -7,7 +7,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.windys.salesaudit.model.AuditEntry;
+import com.windys.salesaudit.model.DataRecord;
 import com.windys.salesaudit.model.DateControl;
+import com.windys.salesaudit.model.FiscalData;
+import com.windys.salesaudit.model.Site;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -57,6 +60,31 @@ public class SalesAuditRepository {
 	public void deleteAuditEntry(@Valid @NotBlank String selectedRestaurant, Date busDate) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public FiscalData getFiscalCalInfo(Date businessDat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public DataRecord getAuditEntry(String siteNum, Date businessDat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public DataRecord getPolledEntry(String siteNum, Date businessDat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public DataRecord getRdcEntry(String siteNum, Date businessDat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Site getSiteInfo(String selectedRestaurant) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

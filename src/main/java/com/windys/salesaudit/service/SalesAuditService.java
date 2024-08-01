@@ -1,13 +1,11 @@
 package com.windys.salesaudit.service;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -117,18 +115,22 @@ public class SalesAuditService {
     private String taxExemptLabel;
 
 	public FiscalData getFiscalCalInfo(Date businessDat) {
-		// TODO Auto-generated method stub
-		return null;
+		return salesAuditRepository.getFiscalCalInfo(businessDat);
 	}
 
 	public Site getSiteInfo(String selectedRestaurant) {
-		// TODO Auto-generated method stub
-		return null;
+		return salesAuditRepository.getSiteInfo(selectedRestaurant);
 	}
 
-	public AuditEntry getAuditEntry(String selectedRestaurant, DateControl dateControl) {
-		// TODO Auto-generated method stub
-		return null;
+	public AuditEntry getAuditEntry(String siteNum, DateControl dateControl) {
+		AuditEntry auditEntry = new AuditEntry();
+        auditEntry.setSiteNum(siteNum);
+        auditEntry.setBusinessDat(dateControl.getBusinessDat());
+        
+        auditEntry.setAuditActual(salesAuditRepository.getAuditEntry(siteNum, dateControl.getBusinessDat()));
+        auditEntry.setPolledActual(salesAuditRepository.getPolledEntry(siteNum, dateControl.getBusinessDat()));
+        auditEntry.setRdcActual(salesAuditRepository.getRdcEntry(siteNum, dateControl.getBusinessDat()));
+        return auditEntry;
 	}
 
 	public void updateAuditEntry(AuditEntry auditEntry, String userId) {
